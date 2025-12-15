@@ -102,13 +102,25 @@ const Room = () => {
       <div className="bg-white shadow-sm border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">Tim #{activeRoom.id.slice(-8)}</h1>
-              <p className="text-sm text-slate-500 mt-1">
-                Leader: {leader?.name} {isLeader && '(Anda)'}
-              </p>
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => navigate('/dashboard')}
+                className="text-cyan-600 hover:text-cyan-700 hover:bg-cyan-50"
+              >
+                <Home className="h-4 w-4 mr-2" />
+                Dashboard
+              </Button>
+              <div className="border-l border-slate-200 h-8"></div>
+              <div>
+                <h1 className="text-2xl font-bold text-slate-900">Tim #{activeRoom.id.slice(-8)}</h1>
+                <p className="text-sm text-slate-500 mt-1">
+                  Leader: {leader?.name} {isLeader && '(Anda)'}
+                </p>
+              </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-3">
               {isLeader ? (
                 <Button variant="destructive" onClick={handleEndSession}>
                   Akhiri Sesi
@@ -122,6 +134,48 @@ const Room = () => {
                   Keluar
                 </Button>
               )}
+              
+              {/* User Profile Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center gap-2 hover:bg-cyan-50 px-2">
+                    <Avatar className="h-9 w-9 border-2 border-cyan-500">
+                      <AvatarImage src={user?.avatar} />
+                      <AvatarFallback className="bg-cyan-100 text-cyan-600 font-semibold">
+                        {user?.name?.charAt(0) || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-white border border-slate-200 shadow-lg rounded-lg">
+                  <DropdownMenuLabel className="text-slate-900">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium">{user?.name}</p>
+                      <p className="text-xs text-slate-500">{user?.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-slate-100" />
+                  <DropdownMenuItem className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700">
+                    <UserCircle className="mr-2 h-4 w-4 text-cyan-600" />
+                    <span>Lihat Profil</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700">
+                    <Settings className="mr-2 h-4 w-4 text-cyan-600" />
+                    <span>Pengaturan</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-slate-100" />
+                  <DropdownMenuItem 
+                    className="cursor-pointer hover:bg-red-50 focus:bg-red-50 text-red-600"
+                    onClick={() => {
+                      handleLeaveRoom();
+                      navigate('/login');
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Keluar Akun</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
