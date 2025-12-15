@@ -6,8 +6,9 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { ROLES } from '../mock/mockData';
-import { User, Briefcase, Tag, Users, LogOut, Loader2, Zap, MapPin } from 'lucide-react';
+import { User, Briefcase, Tag, Users, LogOut, Loader2, Zap, MapPin, Settings, UserCircle } from 'lucide-react';
 
 const Dashboard = () => {
   const navigate = useNavigate();
