@@ -72,25 +72,28 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-8">
-      <Card className="w-full max-w-md shadow-xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center">Daftar</CardTitle>
-          <CardDescription className="text-center">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-8">
+      <Card className="w-full max-w-md shadow-sm border border-slate-100 rounded-2xl">
+        <CardHeader className="space-y-3 text-center pb-6">
+          <div className="mx-auto">
+            <h1 className="text-3xl font-bold text-cyan-600 mb-1">TeamSync</h1>
+          </div>
+          <CardTitle className="text-2xl font-bold text-slate-900">Daftar</CardTitle>
+          <CardDescription className="text-slate-500">
             Buat akun baru untuk mulai mencari tim proyek
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 px-6 pb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username" className="text-slate-700">Username</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input
                   id="username"
                   type="text"
                   placeholder="username_anda"
-                  className="pl-10"
+                  className="pl-10 bg-slate-50 border-slate-200 focus:ring-cyan-500 focus:border-cyan-500 rounded-lg"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                   required
@@ -99,14 +102,14 @@ const Register = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-slate-700">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="nama@email.com"
-                  className="pl-10"
+                  className="pl-10 bg-slate-50 border-slate-200 focus:ring-cyan-500 focus:border-cyan-500 rounded-lg"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
@@ -115,14 +118,14 @@ const Register = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-slate-700">Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
-                  className="pl-10"
+                  className="pl-10 bg-slate-50 border-slate-200 focus:ring-cyan-500 focus:border-cyan-500 rounded-lg"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
@@ -131,14 +134,14 @@ const Register = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Konfirmasi Password</Label>
+              <Label htmlFor="confirmPassword" className="text-slate-700">Konfirmasi Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input
                   id="confirmPassword"
                   type="password"
                   placeholder="••••••••"
-                  className="pl-10"
+                  className="pl-10 bg-slate-50 border-slate-200 focus:ring-cyan-500 focus:border-cyan-500 rounded-lg"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   required
@@ -146,14 +149,18 @@ const Register = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button 
+              type="submit" 
+              className="w-full bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg shadow-sm font-medium" 
+              disabled={loading}
+            >
               {loading ? 'Memproses...' : 'Daftar'}
             </Button>
           </form>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-slate-200" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-white px-2 text-slate-500">Atau lanjutkan dengan</span>
@@ -162,8 +169,7 @@ const Register = () => {
 
           <Button
             type="button"
-            variant="outline"
-            className="w-full"
+            className="w-full border-2 border-slate-200 text-slate-600 hover:border-cyan-500 hover:text-cyan-600 bg-transparent rounded-lg font-medium"
             onClick={handleGoogleRegister}
             disabled={loading}
           >
@@ -173,7 +179,7 @@ const Register = () => {
 
           <p className="text-center text-sm text-slate-600">
             Sudah punya akun?{' '}
-            <Link to="/login" className="font-semibold text-blue-600 hover:text-blue-700">
+            <Link to="/login" className="font-semibold text-cyan-600 hover:text-cyan-700">
               Masuk
             </Link>
           </p>
