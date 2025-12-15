@@ -62,25 +62,28 @@ const ProfileSetup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-8">
-      <Card className="w-full max-w-2xl shadow-xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center">Lengkapi Profil</CardTitle>
-          <CardDescription className="text-center">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-8">
+      <Card className="w-full max-w-2xl shadow-sm border border-slate-100 rounded-2xl">
+        <CardHeader className="space-y-3 text-center pb-6">
+          <div className="mx-auto">
+            <h1 className="text-3xl font-bold text-cyan-600 mb-1">TeamSync</h1>
+          </div>
+          <CardTitle className="text-2xl font-bold text-slate-900">Lengkapi Profil</CardTitle>
+          <CardDescription className="text-slate-500">
             Berikan informasi tentang diri Anda untuk matchmaking yang lebih baik
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-6 pb-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Nama Lengkap</Label>
+              <Label htmlFor="name" className="text-slate-700">Nama Lengkap</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input
                   id="name"
                   type="text"
                   placeholder="Nama lengkap Anda"
-                  className="pl-10"
+                  className="pl-10 bg-slate-50 border-slate-200 focus:ring-cyan-500 focus:border-cyan-500 rounded-lg"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
@@ -89,13 +92,13 @@ const ProfileSetup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="birthdate">Tanggal Lahir</Label>
+              <Label htmlFor="birthdate" className="text-slate-700">Tanggal Lahir</Label>
               <div className="relative">
                 <Calendar className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input
                   id="birthdate"
                   type="date"
-                  className="pl-10"
+                  className="pl-10 bg-slate-50 border-slate-200 focus:ring-cyan-500 focus:border-cyan-500 rounded-lg"
                   value={formData.birthdate}
                   onChange={(e) => setFormData({ ...formData, birthdate: e.target.value })}
                   required
@@ -104,14 +107,14 @@ const ProfileSetup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
+              <Label htmlFor="role" className="text-slate-700">Role</Label>
               <div className="relative">
                 <Briefcase className="absolute left-3 top-3 h-4 w-4 text-slate-400 z-10" />
                 <Select
                   value={formData.role}
                   onValueChange={(value) => setFormData({ ...formData, role: value })}
                 >
-                  <SelectTrigger className="pl-10">
+                  <SelectTrigger className="pl-10 bg-slate-50 border-slate-200 focus:ring-cyan-500 focus:border-cyan-500 rounded-lg">
                     <SelectValue placeholder="Pilih role Anda" />
                   </SelectTrigger>
                   <SelectContent>
@@ -129,7 +132,7 @@ const ProfileSetup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="skills">Skills</Label>
+              <Label htmlFor="skills" className="text-slate-700">Skills</Label>
               <div className="space-y-3">
                 <div className="flex gap-2">
                   <div className="relative flex-1">
@@ -138,21 +141,25 @@ const ProfileSetup = () => {
                       id="skills"
                       type="text"
                       placeholder="Tambah skill (contoh: React, Python)"
-                      className="pl-10"
+                      className="pl-10 bg-slate-50 border-slate-200 focus:ring-cyan-500 focus:border-cyan-500 rounded-lg"
                       value={skillInput}
                       onChange={(e) => setSkillInput(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleAddSkill(e)}
                     />
                   </div>
-                  <Button type="button" onClick={handleAddSkill} variant="secondary">
+                  <Button 
+                    type="button" 
+                    onClick={handleAddSkill}
+                    className="border-2 border-slate-200 text-slate-600 hover:border-cyan-500 hover:text-cyan-600 bg-transparent rounded-lg font-medium"
+                  >
                     Tambah
                   </Button>
                 </div>
                 
                 {formData.skills.length > 0 && (
-                  <div className="flex flex-wrap gap-2 p-3 bg-slate-50 rounded-lg">
+                  <div className="flex flex-wrap gap-2 p-3 bg-cyan-50 border border-cyan-100 rounded-lg">
                     {formData.skills.map((skill, index) => (
-                      <Badge key={index} variant="secondary" className="px-3 py-1 text-sm">
+                      <Badge key={index} className="bg-slate-100 text-slate-600 rounded-full px-3 py-1 text-sm">
                         {skill}
                         <button
                           type="button"
@@ -168,7 +175,11 @@ const ProfileSetup = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button 
+              type="submit" 
+              className="w-full bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg shadow-sm font-medium" 
+              disabled={loading}
+            >
               {loading ? 'Menyimpan...' : 'Simpan Profil'}
             </Button>
           </form>
