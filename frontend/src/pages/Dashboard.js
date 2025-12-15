@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useRoom } from '../contexts/RoomContext';
 import { Button } from '../components/ui/button';
@@ -9,11 +9,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { ROLES } from '../mock/mockData';
 import { User, Briefcase, Tag, Users, LogOut, Loader2, Zap, MapPin, Settings, UserCircle } from 'lucide-react';
+import { useToast } from '../hooks/use-toast';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { startMatchmaking, matchmakingStatus, roomHistory, activeRoom } = useRoom();
+  const { toast } = useToast();
 
   const getRoleColor = (role) => {
     return ROLES.find(r => r.value === role)?.color || 'bg-slate-500';
@@ -34,13 +36,27 @@ const Dashboard = () => {
     navigate('/login');
   };
 
+  const handleViewProfile = () => {
+    navigate('/profile-setup');
+  };
+
+  const handleSettings = () => {
+    toast({
+      title: 'Coming Soon',
+      description: 'Settings feature coming soon!',
+      duration: 3000,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-cyan-600">TeamSync</h1>
+            <Link to="/dashboard" className="cursor-pointer hover:opacity-80 transition-opacity">
+              <h1 className="text-2xl font-bold text-cyan-600">TeamSync</h1>
+            </Link>
             
             {/* User Profile Menu */}
             <DropdownMenu>
@@ -66,11 +82,17 @@ const Dashboard = () => {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-slate-100" />
-                <DropdownMenuItem className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700">
+                <DropdownMenuItem 
+                  className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700"
+                  onClick={handleViewProfile}
+                >
                   <UserCircle className="mr-2 h-4 w-4 text-cyan-600" />
                   <span>Lihat Profil</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700">
+                <DropdownMenuItem 
+                  className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700"
+                  onClick={handleSettings}
+                >
                   <Settings className="mr-2 h-4 w-4 text-cyan-600" />
                   <span>Pengaturan</span>
                 </DropdownMenuItem>

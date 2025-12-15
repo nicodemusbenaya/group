@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useRoom } from '../contexts/RoomContext';
 import { Button } from '../components/ui/button';
@@ -8,17 +8,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { ScrollArea } from '../components/ui/scroll-area';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { ROLES } from '../mock/mockData';
-import { Crown, Send, LogOut, Users, Copy, Settings, UserCircle, Home } from 'lucide-react';
+import { Crown, Send, LogOut, Users, Copy, Settings, UserCircle, Home, Eye } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 
 const Room = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { activeRoom, messages, sendMessage, endSession, leaveRoom } = useRoom();
   const { toast } = useToast();
   const [messageInput, setMessageInput] = useState('');
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -67,6 +70,29 @@ const Room = () => {
   const handleCopyRoomCode = () => {
     navigator.clipboard.writeText(activeRoom.id);
     toast({ title: 'Kode room disalin!', description: 'Kode room telah disalin ke clipboard.' });
+  };
+
+  const handleViewProfile = () => {
+    navigate('/profile-setup');
+  };
+
+  const handleSettings = () => {
+    toast({
+      title: 'Coming Soon',
+      description: 'Settings feature coming soon!',
+      duration: 3000,
+    });
+  };
+
+  const handleLogoutAccount = () => {
+    leaveRoom();
+    logout();
+    navigate('/login');
+  };
+
+  const handleViewMemberProfile = (member) => {
+    setSelectedMember(member);
+    setIsProfileDialogOpen(true);
   };
 
   return (
@@ -155,21 +181,24 @@ const Room = () => {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-slate-100" />
-                  <DropdownMenuItem className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700">
+                  <DropdownMenuItem 
+                    className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700"
+                    onClick={handleViewProfile}
+                  >
                     <UserCircle className="mr-2 h-4 w-4 text-cyan-600" />
                     <span>Lihat Profil</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700">
+                  <DropdownMenuItem 
+                    className="cursor-pointer hover:bg-cyan-50 focus:bg-cyan-50 text-slate-700"
+                    onClick={handleSettings}
+                  >
                     <Settings className="mr-2 h-4 w-4 text-cyan-600" />
                     <span>Pengaturan</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-slate-100" />
                   <DropdownMenuItem 
                     className="cursor-pointer hover:bg-red-50 focus:bg-red-50 text-red-600"
-                    onClick={() => {
-                      handleLeaveRoom();
-                      navigate('/login');
-                    }}
+                    onClick={handleLogoutAccount}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Keluar Akun</span>
@@ -192,15 +221,24 @@ const Room = () => {
             </div>
             <div className="space-y-3">
               {activeRoom.members.map((member) => (
-                <Card key={member.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <Card 
+                  key={member.id} 
+                  className="bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:border-cyan-200 transition-all cursor-pointer group"
+                  onClick={() => handleViewMemberProfile(member)}
+                >
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={member.avatar} />
-                        <AvatarFallback className="bg-cyan-100 text-cyan-600 font-semibold">
-                          {member.name?.charAt(0) || 'U'}
-                        </AvatarFallback>
-                      </Avatar>
+                      <div className="relative">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={member.avatar} />
+                          <AvatarFallback className="bg-cyan-100 text-cyan-600 font-semibold">
+                            {member.name?.charAt(0) || 'U'}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="absolute -bottom-1 -right-1 bg-cyan-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Eye className="h-3 w-3 text-white" />
+                        </div>
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="font-semibold text-sm text-slate-900 truncate">{member.name}</h3>
@@ -313,6 +351,88 @@ const Room = () => {
           </div>
         </div>
       </div>
+
+      {/* Member Profile Dialog */}
+      <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
+        <DialogContent className="bg-white border border-slate-200 rounded-2xl shadow-xl sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-cyan-600">Profil Anggota</DialogTitle>
+            <DialogDescription className="text-slate-500">
+              Informasi lengkap tentang anggota tim
+            </DialogDescription>
+          </DialogHeader>
+          {selectedMember && (
+            <div className="space-y-6 py-4">
+              {/* Avatar & Basic Info */}
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-4">
+                  <Avatar className="h-24 w-24 border-4 border-cyan-500">
+                    <AvatarImage src={selectedMember.avatar} />
+                    <AvatarFallback className="bg-cyan-100 text-cyan-600 text-2xl font-bold">
+                      {selectedMember.name?.charAt(0) || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  {selectedMember.id === activeRoom.leaderId && (
+                    <div className="absolute -top-2 -right-2 bg-yellow-400 rounded-full p-2">
+                      <Crown className="h-5 w-5 text-white" />
+                    </div>
+                  )}
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">{selectedMember.name}</h3>
+                <p className="text-sm text-slate-500">@{selectedMember.username}</p>
+                {selectedMember.email && (
+                  <p className="text-xs text-slate-400 mt-1">{selectedMember.email}</p>
+                )}
+              </div>
+
+              {/* Role Badge */}
+              <div className="flex justify-center">
+                <Badge className="bg-cyan-500 text-white rounded-full px-4 py-2 text-sm font-medium">
+                  {selectedMember.role}
+                </Badge>
+              </div>
+
+              {/* Skills */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-px flex-1 bg-slate-200"></div>
+                  <h4 className="text-sm font-semibold text-slate-700">Skills</h4>
+                  <div className="h-px flex-1 bg-slate-200"></div>
+                </div>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {selectedMember.skills?.map((skill, index) => (
+                    <Badge key={index} className="bg-slate-100 text-slate-600 rounded-full px-3 py-1 text-sm">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Additional Info */}
+              {selectedMember.birthdate && (
+                <div className="bg-cyan-50 rounded-lg p-4 border border-cyan-100">
+                  <p className="text-xs text-cyan-900 font-medium mb-1">Tanggal Lahir</p>
+                  <p className="text-sm text-cyan-700">
+                    {new Date(selectedMember.birthdate).toLocaleDateString('id-ID', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </p>
+                </div>
+              )}
+
+              {/* Bio/Description (if available) */}
+              {selectedMember.bio && (
+                <div className="space-y-2">
+                  <h4 className="text-sm font-semibold text-slate-700">Bio</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">{selectedMember.bio}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
