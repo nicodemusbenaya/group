@@ -8,8 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { ScrollArea } from '../components/ui/scroll-area';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { ROLES } from '../mock/mockData';
-import { Crown, Send, LogOut, Users, Copy } from 'lucide-react';
+import { Crown, Send, LogOut, Users, Copy, Settings, UserCircle, Home } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 
 const Room = () => {
